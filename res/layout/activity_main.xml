@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/ultrimg_background" >
+
+    <RelativeLayout android:id="@+id/relative1" android:layout_width="fill_parent" android:layout_height="500dp">
+    	<ImageView android:id="@+id/back_image" android:src="@drawable/test3" android:layout_centerInParent="true" android:scaleType="fitStart" android:layout_width="wrap_content" android:layout_height="wrap_content"
+	        android:contentDescription="@string/img_description" />
+	    <com.example.testmei2.EditImage
+		        android:id="@+id/edit_image"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent" >
+		</com.example.testmei2.EditImage>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_below="@id/relative1" android:layout_width="fill_parent" android:layout_height="wrap_content" >
+		<Button android:id="@+id/button_img" android:text="@string/img_button"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true" />
+		<Button android:id="@+id/size1" android:text="@string/size1" android:layout_width="wrap_content" android:layout_height="wrap_content"  
+		    android:layout_toRightOf="@id/button_img" />
+    </RelativeLayout>
+
+</RelativeLayout>

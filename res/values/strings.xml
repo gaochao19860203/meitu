@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">testmei2</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="cut_result_main">CutResult</string>
+    <string name="img_button">完成</string>
+    <string name="img_description">要裁剪的图片</string>
+  	<string name="imgnew_description">裁剪后的图片</string>
+  	<string name="size1">4:3</string>
+  
+</resources>
