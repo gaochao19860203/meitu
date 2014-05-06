@@ -1,4 +1,4 @@
 meitu
 =====
 
-meitu
+init project
