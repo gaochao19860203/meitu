@@ -2,7 +2,6 @@ package com.example.testmei2;
 
 import java.io.ByteArrayOutputStream;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,9 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
 	private static final String TAG = "mei";
@@ -28,8 +29,7 @@ public class MainActivity extends Activity {
 	private Intent intent;
 	private byte[] bf;
 	private Button size1;
-
-	//	private RelativeLayout relative1;
+	private RelativeLayout relative1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,51 +40,50 @@ public class MainActivity extends Activity {
 		imageView = (ImageView) findViewById(R.id.back_image);
 		editImage = (EditImage) findViewById(R.id.edit_image);
 		size1 = (Button) findViewById(R.id.size1);
-		//		relative1 = (RelativeLayout) findViewById(R.id.relative1);
+		relative1 = (RelativeLayout) findViewById(R.id.relative1);
 
-		//		ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
-		//		viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-		//
-		//			@Override
-		//			public boolean onPreDraw() {
-		//				imageView.getViewTreeObserver().removeOnPreDrawListener(this);
-		//				Log.e(TAG, "width: " + imageView.getWidth());
-		//				Log.e(TAG, "height: " + imageView.getHeight());
-		//				Log.e(TAG, "left: " + imageView.getLeft());
-		//				Log.e(TAG, "top: " + imageView.getTop());
-		//				Log.e(TAG, "right: " + imageView.getRight());
-		//				Log.e(TAG, "bottom: " + imageView.getBottom());
-		//
-		//				Log.e(TAG, "" + editImage.getLeftUpPoint());
-		//				Log.e(TAG, "" + editImage.getRightDownPoint());
-		//				Log.e(TAG, "new " + editImage.getLeftUpPoint());
-		//				Log.e(TAG, "new " + editImage.getRightDownPoint());
-		//				return true;
-		//			}
-		//
-		//		});
+		ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
+		viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+			@Override
+			public boolean onPreDraw() {
+				imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+				//				Log.e(TAG, "width: " + imageView.getWidth());
+				//				Log.e(TAG, "height: " + imageView.getHeight());
+				//				Log.e(TAG, "relative1 width: " + relative1.getWidth());
+				//				Log.e(TAG, "relative1 height: " + relative1.getHeight());
+
+				bit = Utils.compressImage(getResources(), R.drawable.mao, relative1.getWidth(), relative1.getHeight());
+				Log.e(TAG, "width: " + bit.getWidth() + "    height: " + bit.getHeight());
+
+				imageView.setImageBitmap(bit);
+
+				//				Log.e(TAG, "width: " + imageView.getWidth());
+				//				Log.e(TAG, "height: " + imageView.getHeight());
+
+				editImage.setImage(bit);
+				leftUpPoint = editImage.getLeftUpPoint();
+				rightDownPoint = editImage.getRightDownPoint();
+				int startX = imageView.getWidth() / 2 - bit.getWidth() / 2 + imageView.getLeft();
+				int startY = imageView.getHeight() / 2 - bit.getHeight() / 2 + imageView.getTop();
+				editImage.changeToMaxSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
+
+				return true;
+			}
+
+		});
 
 		button.setOnClickListener(new View.OnClickListener() {
 
-			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
 
 				leftUpPoint = editImage.getLeftUpPoint();
 				rightDownPoint = editImage.getRightDownPoint();
 
-				Log.e(TAG, "leftUpPoint.x: " + leftUpPoint.x + "     leftUpPoint.y:" + leftUpPoint.y);
-				Log.e(TAG, "rightDownPoint.x: " + rightDownPoint.x + "     rightDownPoint.y:" + rightDownPoint.y);
-				Log.e(TAG, "imageView left: " + imageView.getLeft());
-				Log.e(TAG, "imageView top: " + imageView.getTop());
-
 				Drawable drawable = imageView.getDrawable();
 				bit = ((BitmapDrawable) drawable).getBitmap();
-
-				float scaleX = imageView.getScaleX();
-				float scaleY = imageView.getScaleY();
-
-				Log.e(TAG, "scaleX: " + scaleX + "     scaleY: " + scaleY);
 
 				int realWidth = rightDownPoint.x - leftUpPoint.x;
 				int realHeight = rightDownPoint.y - leftUpPoint.y;
@@ -101,9 +100,14 @@ public class MainActivity extends Activity {
 				} else {
 					height = bit.getHeight();
 				}
-				Log.e(TAG, "width: " + width + "     height: " + height);
-				newBitmap = Bitmap.createBitmap(bit, leftUpPoint.x - imageView.getLeft(),
-						leftUpPoint.y - imageView.getTop(), width, height);
+				Log.e(TAG, "width: " + bit.getWidth() + "    height: " + bit.getHeight());
+				Log.e(TAG, "leftUpPoint: " + editImage.getLeftUpPoint());
+				int startX = leftUpPoint.x - (imageView.getWidth() / 2 - bit.getWidth() / 2) - imageView.getLeft();
+				int startY = leftUpPoint.y - (imageView.getHeight() / 2 - bit.getHeight() / 2) - imageView.getTop();
+				Log.e(TAG, "startX:" + startX + "   startY:" + startY + "     width: " + width + "     height: "
+						+ height);
+
+				newBitmap = Bitmap.createBitmap(bit, startX, startY, width, height);
 
 				bf = bitmap2Bytes(newBitmap);
 
@@ -130,13 +134,13 @@ public class MainActivity extends Activity {
 					w = width;
 					h = width * 3 / 4;
 				}
-				Log.e(TAG, "width: " + width + "    height:" + height);
-				Log.e(TAG, "w: " + w + "    h:" + h);
+				//				Log.e(TAG, "width: " + width + "    height:" + height);
+				//				Log.e(TAG, "w: " + w + "    h:" + h);
 				int left = width / 2 - w / 2;
 				int top = height / 2 - h / 2;
 				int right = width / 2 + w / 2;
 				int bottom = height / 2 + h / 2;
-				Log.e(TAG, "left: " + left + "     top:" + top + "    right:" + right + "     bottom:" + bottom);
+				//				Log.e(TAG, "left: " + left + "     top:" + top + "    right:" + right + "     bottom:" + bottom);
 				editImage.changeSize(left, top, right, bottom);
 			}
 		});

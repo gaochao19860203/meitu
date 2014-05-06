@@ -30,7 +30,18 @@ public class EditImage extends View {
 	private static final int FRAME_MIN_HEIGHT = 125;
 	private final int DOT_RADIO = 20;
 	private Bitmap dot, dotSelected;
-	private final int[] EDGE_MIDDLERECT_WH = { 10, 40 };
+	private final int[] EDGE_MIDDLERECT_WH = { 10, 40 }; // 矩形的边的中点为中心的小矩形
+	private Bitmap image; //图片
+
+	/* 控制矩形的活动范围 */
+	private int minX;
+	private int minY;
+	private int maxX;
+	private int maxY;
+
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
 
 	public EditImage(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -54,6 +65,20 @@ public class EditImage extends View {
 
 	public Point getRightDownPoint() {
 		return rightDownPoint;
+	}
+
+	public void changeToMaxSize(int left, int top, int right, int bottom) {
+		leftUpPoint.x = left;
+		leftUpPoint.y = top;
+		rightDownPoint.x = right;
+		rightDownPoint.y = bottom;
+
+		minX = left;
+		maxX = right;
+		minY = top;
+		maxY = bottom;
+
+		this.invalidate();
 	}
 
 	public void changeSize(int left, int top, int right, int bottom) {
@@ -338,16 +363,28 @@ public class EditImage extends View {
 	 * 移动限制
 	 */
 	private void moveRestriction() {
-		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
-			offsetLeftUpPoint.x = -leftUpPoint.x;
-		} else if (leftUpPoint.x + offsetLeftUpPoint.x > this.getWidth() - (rightDownPoint.x - leftUpPoint.x)) {
-			offsetLeftUpPoint.x = this.getWidth() - (rightDownPoint.x - leftUpPoint.x) - leftUpPoint.x;
+		if (leftUpPoint.x + offsetLeftUpPoint.x < minX) {
+			offsetLeftUpPoint.x = minX - leftUpPoint.x;
+		} else if (leftUpPoint.x + offsetLeftUpPoint.x > maxX - (rightDownPoint.x - leftUpPoint.x)) {
+			offsetLeftUpPoint.x = maxX - (rightDownPoint.x - leftUpPoint.x) - leftUpPoint.x;
 		}
-		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
-			offsetLeftUpPoint.y = -leftUpPoint.y;
-		} else if (leftUpPoint.y + offsetLeftUpPoint.y > this.getHeight() - (rightDownPoint.y - leftUpPoint.y)) {
-			offsetLeftUpPoint.y = this.getHeight() - (rightDownPoint.y - leftUpPoint.y) - leftUpPoint.y;
+
+		if (leftUpPoint.y + offsetLeftUpPoint.y < minY) {
+			offsetLeftUpPoint.y = minY - leftUpPoint.y;
+		} else if (leftUpPoint.y + offsetLeftUpPoint.y > maxY - (rightDownPoint.y - leftUpPoint.y)) {
+			offsetLeftUpPoint.y = maxY - (rightDownPoint.y - leftUpPoint.y) - leftUpPoint.y;
 		}
+
+		//		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
+		//			offsetLeftUpPoint.x = -leftUpPoint.x;
+		//		} else if (leftUpPoint.x + offsetLeftUpPoint.x > this.getWidth() - (rightDownPoint.x - leftUpPoint.x)) {
+		//			offsetLeftUpPoint.x = this.getWidth() - (rightDownPoint.x - leftUpPoint.x) - leftUpPoint.x;
+		//		}
+		//		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
+		//			offsetLeftUpPoint.y = -leftUpPoint.y;
+		//		} else if (leftUpPoint.y + offsetLeftUpPoint.y > this.getHeight() - (rightDownPoint.y - leftUpPoint.y)) {
+		//			offsetLeftUpPoint.y = this.getHeight() - (rightDownPoint.y - leftUpPoint.y) - leftUpPoint.y;
+		//		}
 	}
 
 	/**
