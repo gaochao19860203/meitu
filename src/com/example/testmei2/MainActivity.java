@@ -49,25 +49,22 @@ public class MainActivity extends Activity {
 			public boolean onPreDraw() {
 				imageView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-				//				Log.e(TAG, "width: " + imageView.getWidth());
-				//				Log.e(TAG, "height: " + imageView.getHeight());
-				//				Log.e(TAG, "relative1 width: " + relative1.getWidth());
-				//				Log.e(TAG, "relative1 height: " + relative1.getHeight());
+				Log.e(TAG, "relative1 width: " + relative1.getWidth() + "    height: " + relative1.getHeight());
 
 				bit = Utils.compressImage(getResources(), R.drawable.mao, relative1.getWidth(), relative1.getHeight());
-				Log.e(TAG, "width: " + bit.getWidth() + "    height: " + bit.getHeight());
-
 				imageView.setImageBitmap(bit);
 
-				//				Log.e(TAG, "width: " + imageView.getWidth());
-				//				Log.e(TAG, "height: " + imageView.getHeight());
+				Log.e(TAG, "bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
+				Log.e(TAG, "imageView width: " + imageView.getWidth() + "    height: " + imageView.getHeight());
 
-				editImage.setImage(bit);
 				leftUpPoint = editImage.getLeftUpPoint();
 				rightDownPoint = editImage.getRightDownPoint();
 				int startX = imageView.getWidth() / 2 - bit.getWidth() / 2 + imageView.getLeft();
 				int startY = imageView.getHeight() / 2 - bit.getHeight() / 2 + imageView.getTop();
-				editImage.changeToMaxSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
+
+				Log.e(TAG, "startX: " + startX + "  startY:" + startY);
+				editImage.setMaxSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
+				editImage.changeSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
 
 				return true;
 			}
@@ -124,8 +121,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				int width = imageView.getWidth();
-				int height = imageView.getHeight();
+				Drawable drawable = imageView.getDrawable();
+				bit = ((BitmapDrawable) drawable).getBitmap();
+
+				int width = bit.getWidth();
+				int height = bit.getHeight();
 				int w = 0, h = 0;
 				if (width / height > 4.0f / 3.0f) {
 					h = height;
@@ -134,12 +134,11 @@ public class MainActivity extends Activity {
 					w = width;
 					h = width * 3 / 4;
 				}
-				//				Log.e(TAG, "width: " + width + "    height:" + height);
-				//				Log.e(TAG, "w: " + w + "    h:" + h);
-				int left = width / 2 - w / 2;
-				int top = height / 2 - h / 2;
-				int right = width / 2 + w / 2;
-				int bottom = height / 2 + h / 2;
+				int left = imageView.getWidth() / 2 - w / 2 + imageView.getLeft();
+				int top = imageView.getHeight() / 2 - h / 2 + imageView.getTop();
+				int right = imageView.getWidth() / 2 + w / 2 + imageView.getLeft();
+				int bottom = imageView.getHeight() / 2 + h / 2 + imageView.getTop();
+
 				//				Log.e(TAG, "left: " + left + "     top:" + top + "    right:" + right + "     bottom:" + bottom);
 				editImage.changeSize(left, top, right, bottom);
 			}

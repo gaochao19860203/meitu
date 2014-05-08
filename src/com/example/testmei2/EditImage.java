@@ -67,20 +67,27 @@ public class EditImage extends View {
 		return rightDownPoint;
 	}
 
-	public void changeToMaxSize(int left, int top, int right, int bottom) {
-		leftUpPoint.x = left;
-		leftUpPoint.y = top;
-		rightDownPoint.x = right;
-		rightDownPoint.y = bottom;
-
+	/****
+	 * 设置最大矩形框坐标点，对矩形的操作不会超过这个范围
+	 * @param left
+	 * @param top
+	 * @param right
+	 * @param bottom
+	 */
+	public void setMaxSize(int left, int top, int right, int bottom) {
 		minX = left;
 		maxX = right;
 		minY = top;
 		maxY = bottom;
-
-		this.invalidate();
 	}
 
+	/****
+	 * 改变矩形框范围坐标
+	 * @param left
+	 * @param top
+	 * @param right
+	 * @param bottom
+	 */
 	public void changeSize(int left, int top, int right, int bottom) {
 		leftUpPoint.x = left;
 		leftUpPoint.y = top;
@@ -363,6 +370,7 @@ public class EditImage extends View {
 	 * 移动限制
 	 */
 	private void moveRestriction() {
+		/** 移动整个矩形时限制边界在图片的坐标范围内 **/
 		if (leftUpPoint.x + offsetLeftUpPoint.x < minX) {
 			offsetLeftUpPoint.x = minX - leftUpPoint.x;
 		} else if (leftUpPoint.x + offsetLeftUpPoint.x > maxX - (rightDownPoint.x - leftUpPoint.x)) {
@@ -375,6 +383,7 @@ public class EditImage extends View {
 			offsetLeftUpPoint.y = maxY - (rightDownPoint.y - leftUpPoint.y) - leftUpPoint.y;
 		}
 
+		/** 移动整个矩形时限制边界在整个UI坐标范围内 **/
 		//		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
 		//			offsetLeftUpPoint.x = -leftUpPoint.x;
 		//		} else if (leftUpPoint.x + offsetLeftUpPoint.x > this.getWidth() - (rightDownPoint.x - leftUpPoint.x)) {
@@ -391,86 +400,134 @@ public class EditImage extends View {
 	 * 左上缩放限制
 	 */
 	private void leftUpScaleRestriction() {
-		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
-			offsetLeftUpPoint.x = -leftUpPoint.x;
+		if (leftUpPoint.x + offsetLeftUpPoint.x < minX) {
+			offsetLeftUpPoint.x = minX - leftUpPoint.x;
 		}
 		if (rightDownPoint.x - (leftUpPoint.x + offsetLeftUpPoint.x) < FRAME_MIN_WIDTH) {
 			offsetLeftUpPoint.x = rightDownPoint.x - leftUpPoint.x - FRAME_MIN_WIDTH;
 		}
 
-		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
-			offsetLeftUpPoint.y = -leftUpPoint.y;
+		if (leftUpPoint.y + offsetLeftUpPoint.y < minY) {
+			offsetLeftUpPoint.y = minY - leftUpPoint.y;
 		}
 		if (rightDownPoint.y - (leftUpPoint.y + offsetLeftUpPoint.y) < FRAME_MIN_HEIGHT) {
 			offsetLeftUpPoint.y = rightDownPoint.y - leftUpPoint.y - FRAME_MIN_HEIGHT;
 		}
+
+		//		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
+		//			offsetLeftUpPoint.x = -leftUpPoint.x;
+		//		}
+		//		if (rightDownPoint.x - (leftUpPoint.x + offsetLeftUpPoint.x) < FRAME_MIN_WIDTH) {
+		//			offsetLeftUpPoint.x = rightDownPoint.x - leftUpPoint.x - FRAME_MIN_WIDTH;
+		//		}
+		//
+		//		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
+		//			offsetLeftUpPoint.y = -leftUpPoint.y;
+		//		}
+		//		if (rightDownPoint.y - (leftUpPoint.y + offsetLeftUpPoint.y) < FRAME_MIN_HEIGHT) {
+		//			offsetLeftUpPoint.y = rightDownPoint.y - leftUpPoint.y - FRAME_MIN_HEIGHT;
+		//		}
 	}
 
 	/**
 	 * 左下缩放限制
 	 */
 	private void leftDownScaleRestriction() {
-		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
-			offsetLeftUpPoint.x = -leftUpPoint.x;
+		if (leftUpPoint.x + offsetLeftUpPoint.x < minX) {
+			offsetLeftUpPoint.x = minX - leftUpPoint.x;
 		}
 		if (rightDownPoint.x - (leftUpPoint.x + offsetLeftUpPoint.x) < FRAME_MIN_WIDTH) {
 			offsetLeftUpPoint.x = rightDownPoint.x - leftUpPoint.x - FRAME_MIN_WIDTH;
 		}
-		if (rightDownPoint.y + offsetRightDownPoint.y > this.getHeight()) {
-			offsetRightDownPoint.y = this.getHeight() - rightDownPoint.y;
+		if (rightDownPoint.y + offsetRightDownPoint.y > maxY) {
+			offsetRightDownPoint.y = maxY - rightDownPoint.y;
 		}
 		if ((rightDownPoint.y + offsetRightDownPoint.y) - leftUpPoint.y < FRAME_MIN_HEIGHT) {
 			offsetRightDownPoint.y = FRAME_MIN_HEIGHT + leftUpPoint.y - rightDownPoint.y;
 		}
+
+		//		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
+		//			offsetLeftUpPoint.x = -leftUpPoint.x;
+		//		}
+		//		if (rightDownPoint.x - (leftUpPoint.x + offsetLeftUpPoint.x) < FRAME_MIN_WIDTH) {
+		//			offsetLeftUpPoint.x = rightDownPoint.x - leftUpPoint.x - FRAME_MIN_WIDTH;
+		//		}
+		//		if (rightDownPoint.y + offsetRightDownPoint.y > this.getHeight()) {
+		//			offsetRightDownPoint.y = this.getHeight() - rightDownPoint.y;
+		//		}
+		//		if ((rightDownPoint.y + offsetRightDownPoint.y) - leftUpPoint.y < FRAME_MIN_HEIGHT) {
+		//			offsetRightDownPoint.y = FRAME_MIN_HEIGHT + leftUpPoint.y - rightDownPoint.y;
+		//		}
 	}
 
 	/**
 	 * 右上缩放限制
 	 */
 	private void rightUpScaleRestriction() {
-		if (rightDownPoint.x + offsetRightDownPoint.x > this.getWidth()) {
-			offsetRightDownPoint.x = this.getWidth() - rightDownPoint.x;
+		if (rightDownPoint.x + offsetRightDownPoint.x > maxX) {
+			offsetRightDownPoint.x = maxX - rightDownPoint.x;
 		}
 		if ((rightDownPoint.x + offsetRightDownPoint.x) - leftUpPoint.x < FRAME_MIN_WIDTH) {
 			offsetRightDownPoint.x = FRAME_MIN_WIDTH + leftUpPoint.x - rightDownPoint.x;
 		}
-		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
-			offsetLeftUpPoint.y = -leftUpPoint.y;
+		if (leftUpPoint.y + offsetLeftUpPoint.y < minY) {
+			offsetLeftUpPoint.y = minY - leftUpPoint.y;
 		}
 		if (rightDownPoint.y - (leftUpPoint.y + offsetLeftUpPoint.y) < FRAME_MIN_HEIGHT) {
 			offsetLeftUpPoint.y = rightDownPoint.y - leftUpPoint.y - FRAME_MIN_HEIGHT;
 		}
+
+		//		if (rightDownPoint.x + offsetRightDownPoint.x > this.getWidth()) {
+		//			offsetRightDownPoint.x = this.getWidth() - rightDownPoint.x;
+		//		}
+		//		if ((rightDownPoint.x + offsetRightDownPoint.x) - leftUpPoint.x < FRAME_MIN_WIDTH) {
+		//			offsetRightDownPoint.x = FRAME_MIN_WIDTH + leftUpPoint.x - rightDownPoint.x;
+		//		}
+		//		if (leftUpPoint.y + offsetLeftUpPoint.y < 0) {
+		//			offsetLeftUpPoint.y = -leftUpPoint.y;
+		//		}
+		//		if (rightDownPoint.y - (leftUpPoint.y + offsetLeftUpPoint.y) < FRAME_MIN_HEIGHT) {
+		//			offsetLeftUpPoint.y = rightDownPoint.y - leftUpPoint.y - FRAME_MIN_HEIGHT;
+		//		}
 	}
 
 	/**
 	 * 右下缩放限制
 	 */
 	private void rightDownScaleRestriction() {
-
-		if (rightDownPoint.x + offsetRightDownPoint.x > this.getWidth()) {
-			offsetRightDownPoint.x = this.getWidth() - rightDownPoint.x;
-
+		if (rightDownPoint.x + offsetRightDownPoint.x > maxX) {
+			offsetRightDownPoint.x = maxX - rightDownPoint.x;
 		}
-
 		if ((rightDownPoint.x + offsetRightDownPoint.x) - leftUpPoint.x < FRAME_MIN_WIDTH) {
 			offsetRightDownPoint.x = FRAME_MIN_WIDTH + leftUpPoint.x - rightDownPoint.x;
 		}
-
-		if (rightDownPoint.y + offsetRightDownPoint.y > this.getHeight()) {
-			offsetRightDownPoint.y = this.getHeight() - rightDownPoint.y;
+		if (rightDownPoint.y + offsetRightDownPoint.y > maxY) {
+			offsetRightDownPoint.y = maxY - rightDownPoint.y;
 		}
-
 		if ((rightDownPoint.y + offsetRightDownPoint.y) - leftUpPoint.y < FRAME_MIN_HEIGHT) {
 			offsetRightDownPoint.y = FRAME_MIN_HEIGHT + leftUpPoint.y - rightDownPoint.y;
 		}
+
+		//		if (rightDownPoint.x + offsetRightDownPoint.x > this.getWidth()) {
+		//			offsetRightDownPoint.x = this.getWidth() - rightDownPoint.x;
+		//		}
+		//		if ((rightDownPoint.x + offsetRightDownPoint.x) - leftUpPoint.x < FRAME_MIN_WIDTH) {
+		//			offsetRightDownPoint.x = FRAME_MIN_WIDTH + leftUpPoint.x - rightDownPoint.x;
+		//		}
+		//		if (rightDownPoint.y + offsetRightDownPoint.y > this.getHeight()) {
+		//			offsetRightDownPoint.y = this.getHeight() - rightDownPoint.y;
+		//		}
+		//		if ((rightDownPoint.y + offsetRightDownPoint.y) - leftUpPoint.y < FRAME_MIN_HEIGHT) {
+		//			offsetRightDownPoint.y = FRAME_MIN_HEIGHT + leftUpPoint.y - rightDownPoint.y;
+		//		}
 	}
 
 	/****
 	 * 左边缘缩放限制
 	 */
 	private void leftEdgeScaleRestriction() {
-		if (leftUpPoint.x + offsetLeftUpPoint.x < 0) {
-			offsetLeftUpPoint.x = -leftUpPoint.x;
+		if (leftUpPoint.x + offsetLeftUpPoint.x < minX) {
+			offsetLeftUpPoint.x = minX - leftUpPoint.x;
 		}
 
 		if (rightDownPoint.x - (leftUpPoint.x + offsetLeftUpPoint.x) < FRAME_MIN_WIDTH) {
