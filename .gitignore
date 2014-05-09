@@ -5,3 +5,4 @@ bin/
 lint.xml
 gen/
 proguard-project.txt
+res/drawable-hdpi/Thumbs.db
