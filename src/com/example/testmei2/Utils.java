@@ -16,7 +16,7 @@ public class Utils {
 	//	}
 
 	/****
-	 * Ñ¹ËõÍ¼Æ¬
+	 * å‹ç¼©å›¾ç‰‡
 	 * @param bit
 	 * @param resources
 	 * @param resId
@@ -34,7 +34,7 @@ public class Utils {
 	}
 
 	/****
-	 * ¼ÆËãÍ¼Æ¬µÄËõ·ÅÖµ
+	 * è®¡ç®—å›¾ç‰‡çš„ç¼©æ”¾å€¼Öµ
 	 * @param options
 	 * @param reqWidth
 	 * @param reqHeight
@@ -54,7 +54,7 @@ public class Utils {
 	}
 
 	/****
-	 * ¼ÆËã±Ènum´óµÄ×îĞ¡µÄ2µÄÃİÊı
+	 * è®¡ç®—æ¯”numå¤§çš„æœ€å°çš„2çš„å¹‚æ•°
 	 * @param num
 	 * @return
 	 */

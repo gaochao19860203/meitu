@@ -51,7 +51,8 @@ public class MainActivity extends Activity {
 
 				Log.e(TAG, "relative1 width: " + relative1.getWidth() + "    height: " + relative1.getHeight());
 
-				bit = Utils.compressImage(getResources(), R.drawable.mao, relative1.getWidth(), relative1.getHeight());
+				bit = Utils.compressImage(getResources(), R.drawable.test2, relative1.getWidth(), relative1.getHeight());
+				Log.e(TAG, "before imageView set bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
 				imageView.setImageBitmap(bit);
 
 				Log.e(TAG, "bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
@@ -99,6 +100,7 @@ public class MainActivity extends Activity {
 				}
 				Log.e(TAG, "width: " + bit.getWidth() + "    height: " + bit.getHeight());
 				Log.e(TAG, "leftUpPoint: " + editImage.getLeftUpPoint());
+				Log.e(TAG, "relative1 left: " + relative1.getLeft() + "    top: " + relative1.getTop());
 				int startX = leftUpPoint.x - (imageView.getWidth() / 2 - bit.getWidth() / 2) - imageView.getLeft();
 				int startY = leftUpPoint.y - (imageView.getHeight() / 2 - bit.getHeight() / 2) - imageView.getTop();
 				Log.e(TAG, "startX:" + startX + "   startY:" + startY + "     width: " + width + "     height: "
@@ -153,7 +155,7 @@ public class MainActivity extends Activity {
 	}
 
 	/***
-	 * 图片转化为byte数组
+	 * 鍥剧墖杞寲涓篵yte鏁扮粍
 	 * @param bm
 	 * @return
 	 */
