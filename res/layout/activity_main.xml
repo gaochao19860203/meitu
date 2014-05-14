@@ -5,7 +5,7 @@
     android:background="@drawable/ultrimg_background" >
 
     <RelativeLayout android:id="@+id/relative1" android:layout_width="fill_parent" android:layout_height="570dp">
-    	<ImageView android:id="@+id/back_image" android:layout_centerInParent="true" android:layout_width="fill_parent" android:layout_height="wrap_content"
+    	<ImageView android:id="@+id/back_image" android:layout_centerInParent="true" android:layout_width="wrap_content" android:layout_height="wrap_content"
 	        android:contentDescription="@string/img_description" />
 	    <com.example.testmei2.EditImage
 		        android:id="@+id/edit_image"
