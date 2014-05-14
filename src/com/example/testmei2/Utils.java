@@ -32,6 +32,8 @@ public class Utils {
 		options.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, resId, options);
 		Log.e(TAG, "first decode width:" + bitmap.getWidth() + "     height:" + bitmap.getHeight());
+
+		// 经过压缩后图片在ImageView中可能会有自适应拉伸，对宽度和高度超过限制的， 需进行进一步压缩
 		if (bitmap.getWidth() > reqWidth || bitmap.getHeight() > reqHeight) {
 			options.inSampleSize *= 2;
 			bitmap = BitmapFactory.decodeResource(resources, resId, options);
