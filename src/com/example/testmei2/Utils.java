@@ -26,11 +26,18 @@ public class Utils {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(resources, resId, options);
-		Log.e(TAG, "options width: " + options.outWidth + "    options height: " + options.outHeight);
 		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 		Log.e(TAG, "inSampleSize: " + options.inSampleSize);
+		Log.e(TAG, "options width: " + options.outWidth + "    options height: " + options.outHeight);
 		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeResource(resources, resId, options);
+		Bitmap bitmap = BitmapFactory.decodeResource(resources, resId, options);
+		Log.e(TAG, "first decode width:" + bitmap.getWidth() + "     height:" + bitmap.getHeight());
+		if (bitmap.getWidth() > reqWidth || bitmap.getHeight() > reqHeight) {
+			options.inSampleSize *= 2;
+			bitmap = BitmapFactory.decodeResource(resources, resId, options);
+			Log.e(TAG, "second decode width:" + bitmap.getWidth() + "     height:" + bitmap.getHeight());
+		}
+		return bitmap;
 	}
 
 	/****
@@ -54,7 +61,7 @@ public class Utils {
 	}
 
 	/****
-	 * 计算比num大的最小的2的幂数
+	 * 计算比num大或相等的最小的2的幂数
 	 * @param num
 	 * @return
 	 */

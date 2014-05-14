@@ -51,8 +51,7 @@ public class MainActivity extends Activity {
 
 				Log.e(TAG, "relative1 width: " + relative1.getWidth() + "    height: " + relative1.getHeight());
 
-				bit = Utils.compressImage(getResources(), R.drawable.lufei, relative1.getWidth(), relative1.getHeight());
-				Log.e(TAG, "before imageView set bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
+				bit = Utils.compressImage(getResources(), R.drawable.test3, relative1.getWidth(), relative1.getHeight());
 				imageView.setImageBitmap(bit);
 
 				Log.e(TAG, "bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
@@ -60,9 +59,9 @@ public class MainActivity extends Activity {
 
 				leftUpPoint = editImage.getLeftUpPoint();
 				rightDownPoint = editImage.getRightDownPoint();
-				int startX = imageView.getLeft() + imageView.getWidth() / 2 - (int)Math.round(bit.getWidth() / 2.0);
-				int startY = imageView.getTop() + imageView.getHeight() / 2 - (int)Math.round(bit.getHeight() / 2.0);
-				Log.e(TAG, "imageView left: "+imageView.getLeft() + "    top:"+imageView.getTop());
+				int startX = imageView.getLeft() + imageView.getWidth() / 2 - (int) Math.round(bit.getWidth() / 2.0);
+				int startY = imageView.getTop() + imageView.getHeight() / 2 - (int) Math.round(bit.getHeight() / 2.0);
+				Log.e(TAG, "imageView left: " + imageView.getLeft() + "    top:" + imageView.getTop());
 				Log.e(TAG, "startX: " + startX + "  startY:" + startY);
 				editImage.setMaxSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
 				editImage.changeSize(startX, startY, startX + bit.getWidth(), startY + bit.getHeight());
@@ -101,7 +100,7 @@ public class MainActivity extends Activity {
 				Log.e(TAG, "bitmap width: " + bit.getWidth() + "    height: " + bit.getHeight());
 				Log.e(TAG, "imageView width: " + imageView.getWidth() + "    height: " + imageView.getHeight());
 				Log.e(TAG, "leftUpPoint: " + editImage.getLeftUpPoint());
-				Log.e(TAG, "imageView left: "+imageView.getLeft() + "    top:"+imageView.getTop());
+				Log.e(TAG, "imageView left: " + imageView.getLeft() + "    top:" + imageView.getTop());
 				Log.e(TAG, "relative1 left: " + relative1.getLeft() + "    top: " + relative1.getTop());
 				int startX = leftUpPoint.x - (imageView.getWidth() / 2 - bit.getWidth() / 2) - imageView.getLeft();
 				int startY = leftUpPoint.y - (imageView.getHeight() / 2 - bit.getHeight() / 2) - imageView.getTop();
